@@ -147,6 +147,7 @@ public class GameView extends SurfaceView implements Runnable {
                         testCollision();
                         testCollisionWallWithEnemy();
                         testCollisionWithBound();
+                        testCollisionWithBoundTop();
                     }
                 } catch (Exception e) {
                 } finally {
@@ -231,7 +232,6 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-    /*Проверка на столкновения*/
     private void testCollisionWithBound() {
         Iterator<Enemy> i = enemy.iterator();
         while (i.hasNext()) {
@@ -242,6 +242,10 @@ public class GameView extends SurfaceView implements Runnable {
                 changeCountListener.change(countPassEnemy);
             }
         }
+    }
+
+    private void testCollisionWithBoundTop() {
+        ball.removeIf(bullet -> bullet.y < 0);
     }
 
     public Bullet createSpriteBullet(int resource, float angleCorrect) {
