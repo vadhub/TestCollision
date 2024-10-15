@@ -27,6 +27,7 @@ public class GameView extends SurfaceView implements Runnable {
      * Объект класса GameLoopThread
      */
     private GameThread mThread;
+    private int countPassEnemy;
 
     private State state = State.BUILD;
 
@@ -40,11 +41,15 @@ public class GameView extends SurfaceView implements Runnable {
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap enemies;
 
-    private List<Wall> walls= new ArrayList<>();
+    private List<Wall> walls = new ArrayList<>();
     Bitmap wall;
 
     private Thread threadEnemy = new Thread(this);
-    private long prevTime;
+    private ChangeCountListener changeCountListener;
+
+    public void setChangeCountListener(ChangeCountListener changeCountListener) {
+        this.changeCountListener = changeCountListener;
+    }
 
     /**
      * Переменная запускающая поток рисования
@@ -141,6 +146,7 @@ public class GameView extends SurfaceView implements Runnable {
                         onDraw(canvas);
                         testCollision();
                         testCollisionWallWithEnemy();
+                        testCollisionWithBound();
                     }
                 } catch (Exception e) {
                 } finally {
@@ -155,17 +161,14 @@ public class GameView extends SurfaceView implements Runnable {
     //-------------End of GameThread--------------------------------------------------\\
 
 
-    /**
-     * Функция рисующая все спрайты и фон
-     */
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(player.bmp, (getWidth() - 32) / 2, getHeight() - 100, null);
 
         Iterator<Wall> w = walls.iterator();
-        while(w.hasNext()) {
+        while (w.hasNext()) {
             Wall e = w.next();
-            if(e.hp > 0) {
+            if (e.hp > 0) {
                 e.onDraw(canvas);
             } else {
                 w.remove();
@@ -173,9 +176,9 @@ public class GameView extends SurfaceView implements Runnable {
         }
 
         Iterator<Enemy> i = enemy.iterator();
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             Enemy e = i.next();
-            if(e.x >= 1000 || e.x <= 1000) {
+            if (e.x >= 1000 || e.x <= 1000) {
                 e.onDraw(canvas);
             } else {
                 i.remove();
@@ -196,10 +199,10 @@ public class GameView extends SurfaceView implements Runnable {
     /*Проверка на столкновения*/
     private void testCollision() {
         Iterator<Bullet> b = ball.iterator();
-        while(b.hasNext()) {
+        while (b.hasNext()) {
             Bullet balls = b.next();
             Iterator<Enemy> i = enemy.iterator();
-            while(i.hasNext()) {
+            while (i.hasNext()) {
                 Enemy enemies = i.next();
 
                 if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width) / 2f)
@@ -213,10 +216,10 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void testCollisionWallWithEnemy() {
         Iterator<Wall> wall = walls.iterator();
-        while(wall.hasNext()) {
+        while (wall.hasNext()) {
             Wall w = wall.next();
             Iterator<Enemy> i = enemy.iterator();
-            while(i.hasNext()) {
+            while (i.hasNext()) {
                 Enemy e = i.next();
                 if ((Math.abs(w.x - e.x) <= (w.width + e.width))
                         && (Math.abs(w.y - e.y) <= (w.height + e.height))) {
@@ -224,6 +227,19 @@ public class GameView extends SurfaceView implements Runnable {
                     e.forward = false;
                     //wall.remove();
                 }
+            }
+        }
+    }
+
+    /*Проверка на столкновения*/
+    private void testCollisionWithBound() {
+        Iterator<Enemy> i = enemy.iterator();
+        while (i.hasNext()) {
+            Enemy enemies = i.next();
+            if (enemies.x < 0) {
+                i.remove();
+                countPassEnemy = countPassEnemy+1;
+                changeCountListener.change(countPassEnemy);
             }
         }
     }
@@ -251,6 +267,10 @@ public class GameView extends SurfaceView implements Runnable {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public interface ChangeCountListener {
+        void change(int count);
     }
 
     public enum State {

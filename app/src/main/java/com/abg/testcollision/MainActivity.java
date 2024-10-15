@@ -1,14 +1,19 @@
 package com.abg.testcollision;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class MainActivity extends AppCompatActivity {
+
+    TextView countPassEnemy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        countPassEnemy = findViewById(R.id.passEnemy);
         GameView gameView = findViewById(R.id.gameView);
+        gameView.setChangeCountListener(count ->  countPassEnemy.setText("Pass enemy: " + count));
         Button building = findViewById(R.id.build);
         Button shoot = findViewById(R.id.shoot);
         building.setOnClickListener(v -> gameView.setState(GameView.State.BUILD));
         shoot.setOnClickListener(v -> gameView.setState(GameView.State.SHOOT));
+        countPassEnemy.setText("ok");
     }
 }
