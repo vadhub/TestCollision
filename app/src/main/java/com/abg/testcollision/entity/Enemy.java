@@ -1,21 +1,15 @@
-package com.abg.testcollision;
+package com.abg.testcollision.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.abg.testcollision.GameView;
+
 import java.util.Random;
 
-public class Enemy {
-    /**Х и У коорданаты*/
-    public int x;
-    public int y;
+public class Enemy extends GameObject {
 
-    /**Скорость*/
     public int speed;
-
-    /**Выосота и ширина спрайта*/
-    public int width;
-    public int height;
 
     public GameView gameView;
     public Bitmap bmp;

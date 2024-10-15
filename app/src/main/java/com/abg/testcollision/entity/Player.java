@@ -1,17 +1,15 @@
-package com.abg.testcollision;
+package com.abg.testcollision.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public class Player {
+import com.abg.testcollision.GameView;
+
+public class Player extends GameObject{
     GameView gameView;
 
     //спрайт
-    Bitmap bmp;
-
-    //х и у координаты рисунка
-    int x;
-    int y;
+    public Bitmap bmp;
 
     //конструктор
     public Player(GameView gameView, Bitmap bmp) {

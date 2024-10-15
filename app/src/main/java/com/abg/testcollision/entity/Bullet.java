@@ -1,26 +1,18 @@
-package com.abg.testcollision;
+package com.abg.testcollision.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public class Bullet {
+import com.abg.testcollision.GameView;
+
+public class Bullet extends GameObject{
     /**Картинка*/
     private Bitmap bmp;
-
-    /**Позиция*/
-    public int x;
-    public int y;
 
     /**Скорость по Х=15*/
     private int mSpeed=25;
 
     public double angle;
-
-    /**Ширина*/
-    public int width;
-
-    /**Ввыоста*/
-    public  int height;
 
     public GameView gameView;
 

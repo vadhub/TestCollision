@@ -10,6 +10,11 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.abg.testcollision.entity.Bullet;
+import com.abg.testcollision.entity.Enemy;
+import com.abg.testcollision.entity.Player;
+import com.abg.testcollision.entity.Wall;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -155,16 +160,6 @@ public class GameView extends SurfaceView implements Runnable {
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(player.bmp, 5.0f, 500.0f, null);
 
-        Iterator<Bullet> j = ball.iterator();
-        while (j.hasNext()) {
-            Bullet b = j.next();
-            if (b.x >= 1000 || b.x <= 1000) {
-                b.onDraw(canvas);
-            } else {
-                j.remove();
-            }
-        }
-
         Iterator<Enemy> i = enemy.iterator();
         while(i.hasNext()) {
             Enemy e = i.next();
@@ -182,6 +177,16 @@ public class GameView extends SurfaceView implements Runnable {
                 e.onDraw(canvas);
             } else {
                 w.remove();
+            }
+        }
+
+        Iterator<Bullet> j = ball.iterator();
+        while (j.hasNext()) {
+            Bullet b = j.next();
+            if (b.x >= 1000 || b.x <= 1000) {
+                b.onDraw(canvas);
+            } else {
+                j.remove();
             }
         }
     }
@@ -211,9 +216,7 @@ public class GameView extends SurfaceView implements Runnable {
             Iterator<Enemy> i = enemy.iterator();
             while(i.hasNext()) {
                 Enemy e = i.next();
-
-                if ((Math.abs(w.x - e.x) <= (w.width + e.width))
-                        && (Math.abs(w.y - e.y) <= (w.height + e.height))) {
+                if (Physic.checkCollision(w, e)) {
                     e.speed = 0;
                     //wall.remove();
                 }
