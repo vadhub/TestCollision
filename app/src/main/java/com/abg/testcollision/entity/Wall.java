@@ -27,4 +27,8 @@ public class Wall extends GameObject {
     public void onDraw(Canvas c) {
         c.drawBitmap(bmp, x, y, null);
     }
+
+    public void destroyWall() {
+        hp--;
+    }
 }

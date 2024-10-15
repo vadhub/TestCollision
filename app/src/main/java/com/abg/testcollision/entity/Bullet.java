@@ -9,9 +9,6 @@ public class Bullet extends GameObject{
     /**Картинка*/
     private Bitmap bmp;
 
-    /**Скорость по Х=15*/
-    private int mSpeed=25;
-
     public double angle;
 
     public GameView gameView;
@@ -20,6 +17,7 @@ public class Bullet extends GameObject{
     public Bullet(GameView gameView, Bitmap bmp, int x, int y, float angleCorrect) {
         this.gameView=gameView;
         this.bmp=bmp;
+        speed = 25;
 
         this.x = x;            //позиция по Х
         this.y = y;          //позиция по У
@@ -27,13 +25,13 @@ public class Bullet extends GameObject{
         this.height = 40;      //высота снаряда
 
         //угол полета пули в зависипости от координаты косания к экрану
-        angle = Math.atan((double)(y - gameView.shotY) / (x - gameView.shotX)) + angleCorrect;
+        angle = Math.atan2(gameView.shotY - y, gameView.shotX - x) + angleCorrect;
     }
 
     /**Перемещение объекта, его направление*/
     private void update() {
-        x += mSpeed * Math.cos(angle);         //движение по Х со скоростью mSpeed и углу заданном координатой angle
-        y += mSpeed * Math.sin(angle);         // движение по У -//-
+        x += speed * Math.cos(angle);         //движение по Х со скоростью mSpeed и углу заданном координатой angle
+        y += speed * Math.sin(angle);         // движение по У -//-
     }
 
     /**Рисуем наши спрайты*/

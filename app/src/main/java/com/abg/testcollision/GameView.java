@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -43,6 +44,7 @@ public class GameView extends SurfaceView implements Runnable {
     Bitmap wall;
 
     private Thread threadEnemy = new Thread(this);
+    private long prevTime;
 
     /**
      * Переменная запускающая поток рисования
@@ -158,17 +160,7 @@ public class GameView extends SurfaceView implements Runnable {
      */
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(player.bmp, 5.0f, 500.0f, null);
-
-        Iterator<Enemy> i = enemy.iterator();
-        while(i.hasNext()) {
-            Enemy e = i.next();
-            if(e.x >= 1000 || e.x <= 1000) {
-                e.onDraw(canvas);
-            } else {
-                i.remove();
-            }
-        }
+        canvas.drawBitmap(player.bmp, (getWidth() - 32) / 2, getHeight() - 100, null);
 
         Iterator<Wall> w = walls.iterator();
         while(w.hasNext()) {
@@ -177,6 +169,16 @@ public class GameView extends SurfaceView implements Runnable {
                 e.onDraw(canvas);
             } else {
                 w.remove();
+            }
+        }
+
+        Iterator<Enemy> i = enemy.iterator();
+        while(i.hasNext()) {
+            Enemy e = i.next();
+            if(e.x >= 1000 || e.x <= 1000) {
+                e.onDraw(canvas);
+            } else {
+                i.remove();
             }
         }
 
@@ -216,8 +218,10 @@ public class GameView extends SurfaceView implements Runnable {
             Iterator<Enemy> i = enemy.iterator();
             while(i.hasNext()) {
                 Enemy e = i.next();
-                if (Physic.checkCollision(w, e)) {
+                if ((Math.abs(w.x - e.x) <= (w.width + e.width))
+                        && (Math.abs(w.y - e.y) <= (w.height + e.height))) {
                     e.speed = 0;
+                    e.forward = false;
                     //wall.remove();
                 }
             }
@@ -226,7 +230,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     public Bullet createSpriteBullet(int resource, float angleCorrect) {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
-        return new Bullet(this, bmp, player.x, getHeight() / 2, angleCorrect);
+        return new Bullet(this, bmp, getWidth() / 2, getHeight() - 60, angleCorrect);
     }
 
     public boolean onTouchEvent(MotionEvent e) {

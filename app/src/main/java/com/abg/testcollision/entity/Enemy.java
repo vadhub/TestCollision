@@ -2,17 +2,19 @@ package com.abg.testcollision.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.abg.testcollision.GameView;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class Enemy extends GameObject {
 
-    public int speed;
-
     public GameView gameView;
     public Bitmap bmp;
+    public boolean forward = true;
+    public int distance;
 
     /**Конструктор класса*/
     public Enemy(GameView gameView, Bitmap bmp, int x, int y){
@@ -29,7 +31,21 @@ public class Enemy extends GameObject {
     }
 
     public void update(){
-        x -= speed;
+        if (forward) {
+            x -= speed;
+        } else {
+            backMove();
+        }
+    }
+
+    public void backMove() {
+        if (distance != 10) {
+            x += 2;
+            distance += 2;
+        } else {
+            forward = true;
+            distance = 0;
+        }
     }
 
     public void onDraw(Canvas c){
