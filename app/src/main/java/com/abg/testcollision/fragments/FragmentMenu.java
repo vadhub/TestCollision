@@ -29,7 +29,7 @@ public class FragmentMenu extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_menu, container);
+        return inflater.inflate(R.layout.fragment_menu, container, false);
     }
 
     @Override
@@ -42,11 +42,12 @@ public class FragmentMenu extends Fragment {
     }
 
     private Fragment startRandomMode() {
-        Random random = new Random();
-        if (random.nextInt(2) == 0) {
-            return new AssaultFragment();
-        } else {
-            return new DefenseFragment();
-        }
+        return new AssaultFragment();
+//        Random random = new Random();
+//        if (random.nextInt(2) == 0) {
+//            return new AssaultFragment();
+//        } else {
+//            return new DefenseFragment();
+//        }
     }
 }

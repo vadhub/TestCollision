@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import com.abg.testcollision.fragments.FragmentMenu;
+
 public class MainActivity extends AppCompatActivity implements Navigator {
 
     @Override
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements Navigator {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
-
+        startFragment(new FragmentMenu());
     }
 
     @Override

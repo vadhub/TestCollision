@@ -20,9 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameModeAssault extends GameMode implements Runnable {
-    /**
-     * Объект класса GameLoopThread
-     */
+
     private GameThread mThread;
     private int countPassEnemy;
 
@@ -43,9 +41,6 @@ public class GameModeAssault extends GameMode implements Runnable {
         this.changeCountListener = changeCountListener;
     }
 
-    /**
-     * Переменная запускающая поток рисования
-     */
     private boolean running = false;
 
     public GameModeAssault(Context context, AttributeSet attrs) {
@@ -54,15 +49,12 @@ public class GameModeAssault extends GameMode implements Runnable {
         mThread = new GameThread(this);
         threadShot.start();
 
-        /*Рисуем все наши объекты и все все все*/
         getHolder().addCallback(new SurfaceHolder.Callback() {
-            /*** Уничтожение области рисования */
             public void surfaceDestroyed(SurfaceHolder holder) {
                 boolean retry = true;
                 mThread.setRunning(false);
                 while (retry) {
                     try {
-                        // ожидание завершение потока
                         mThread.join();
                         retry = false;
                     } catch (InterruptedException e) {
@@ -70,19 +62,17 @@ public class GameModeAssault extends GameMode implements Runnable {
                 }
             }
 
-            /** Создание области рисования */
             public void surfaceCreated(SurfaceHolder holder) {
                 mThread.setRunning(true);
                 mThread.start();
             }
 
-            /** Изменение области рисования */
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             }
         });
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
-        wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
+        wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick_rotated);
     }
 
     @Override
@@ -100,38 +90,25 @@ public class GameModeAssault extends GameMode implements Runnable {
     //-------------Start of GameThread--------------------------------------------------\\
 
     public class GameThread extends Thread {
-
-        /**
-         * Объект класса
-         */
         private GameMode view;
 
-        /**
-         * Конструктор класса
-         */
         public GameThread(GameMode view) {
             this.view = view;
         }
 
-        /**
-         * Задание состояния потока
-         */
         public void setRunning(boolean run) {
             running = run;
         }
 
-        /**
-         * Действия, выполняемые в потоке
-         */
         public void run() {
+            Canvas canvas = null;
+            generateMap();
             while (running) {
-                Canvas canvas = null;
                 try {
-                    // подготовка Canvas-а
                     canvas = view.getHolder().lockCanvas();
                     canvas.drawColor(Color.WHITE);
+
                     synchronized (view.getHolder()) {
-                        // собственно рисование
                         onDraw(canvas);
                         testCollision();
                         testCollisionWallWithEnemy();
@@ -140,9 +117,7 @@ public class GameModeAssault extends GameMode implements Runnable {
                     }
                 } catch (Exception ignored) {
                 } finally {
-                    if (canvas != null) {
-                        view.getHolder().unlockCanvasAndPost(canvas);
-                    }
+                    view.getHolder().unlockCanvasAndPost(canvas);
                 }
             }
         }
@@ -184,7 +159,6 @@ public class GameModeAssault extends GameMode implements Runnable {
         }
     }
 
-    /*Проверка на столкновения*/
     private void testCollision() {
         Iterator<Bullet> b = ball.iterator();
         while (b.hasNext()) {
@@ -244,6 +218,13 @@ public class GameModeAssault extends GameMode implements Runnable {
         ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(3) / 10));
         ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
         ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) * -1 / 10));
+    }
+
+    public void generateMap() {
+        Random random = new Random();
+        walls.add(new Wall(this, wall, random.nextInt(getWidth()), getHeight() / 2));
+        walls.add(new Wall(this, wall, random.nextInt(getWidth()), getHeight() / 2));
+        walls.add(new Wall(this, wall, random.nextInt(getWidth()), getHeight() / 2));
     }
 
     public boolean onTouchEvent(MotionEvent e) {
