@@ -3,16 +3,17 @@ package com.abg.testcollision.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.abg.testcollision.gamemode.GameMode;
 import com.abg.testcollision.gamemode.GameViewDefense;
 
 public class Player extends GameObject{
-    GameViewDefense gameView;
+    GameMode gameView;
 
     //спрайт
     public Bitmap bmp;
 
     //конструктор
-    public Player(GameViewDefense gameView, Bitmap bmp) {
+    public Player(GameMode gameView, Bitmap bmp) {
         this.gameView = gameView;
         this.bmp = bmp;                    //возвращаем рисунок
         this.x = 5;                        //отступ по х нет

@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class GameViewDefense extends SurfaceView implements Runnable {
+public class GameViewDefense extends GameMode implements Runnable {
 
     /**
      * Объект класса GameLoopThread
@@ -116,12 +116,12 @@ public class GameViewDefense extends SurfaceView implements Runnable {
         /**
          * Объект класса
          */
-        private GameViewDefense view;
+        private GameMode view;
 
         /**
          * Конструктор класса
          */
-        public GameThread(GameViewDefense view) {
+        public GameThread(GameMode view) {
             this.view = view;
         }
 
@@ -271,10 +271,6 @@ public class GameViewDefense extends SurfaceView implements Runnable {
 
     public void setState(State state) {
         this.state = state;
-    }
-
-    public interface ChangeCountListener {
-        void change(int count);
     }
 
     public enum State {

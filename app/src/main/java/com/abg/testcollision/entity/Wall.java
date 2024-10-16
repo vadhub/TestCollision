@@ -3,10 +3,11 @@ package com.abg.testcollision.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.abg.testcollision.gamemode.GameMode;
 import com.abg.testcollision.gamemode.GameViewDefense;
 
 public class Wall extends GameObject {
-    GameViewDefense gameView;
+    GameMode gameView;
 
     //спрайт
     public Bitmap bmp;
@@ -14,7 +15,7 @@ public class Wall extends GameObject {
     public int hp = 3;
 
     //конструктор
-    public Wall(GameViewDefense gameView, Bitmap bmp, int x, int y) {
+    public Wall(GameMode gameView, Bitmap bmp, int x, int y) {
         this.gameView = gameView;
         this.bmp = bmp;
         this.x = x;
