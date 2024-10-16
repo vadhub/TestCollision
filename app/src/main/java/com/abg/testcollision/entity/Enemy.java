@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.abg.testcollision.gamemode.GameMode;
-import com.abg.testcollision.gamemode.GameViewDefense;
 
 import java.util.Random;
 

@@ -12,7 +12,6 @@ import android.view.SurfaceHolder;
 import com.abg.testcollision.R;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
-import com.abg.testcollision.entity.Player;
 import com.abg.testcollision.entity.Wall;
 
 import java.util.ArrayList;
@@ -27,14 +26,10 @@ public class GameModeAssault extends GameMode implements Runnable {
     private GameThread mThread;
     private int countPassEnemy;
 
-    private GameViewDefense.State state = GameViewDefense.State.BUILD;
-
     private List<Bullet> ball = new ArrayList<>();
-    private Player player;
-    Bitmap players;
 
     private List<Enemy> enemy = new ArrayList<>();
-    Bitmap enemies;
+    Bitmap players;
 
     private List<Wall> walls = new ArrayList<>();
     Bitmap wall;
@@ -87,9 +82,6 @@ public class GameModeAssault extends GameMode implements Runnable {
         });
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
-        player = new Player(this, players);
-
-        enemies = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
     }
 
@@ -160,7 +152,6 @@ public class GameModeAssault extends GameMode implements Runnable {
 
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(player.bmp, (getWidth() - 32) / 2, getHeight() - 100, null);
 
         Iterator<Wall> w = walls.iterator();
         while (w.hasNext()) {
@@ -253,7 +244,7 @@ public class GameModeAssault extends GameMode implements Runnable {
         ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(3) / 10));
         ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
         ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) * -1 / 10));
-    };
+    }
 
     public boolean onTouchEvent(MotionEvent e) {
         shotX = (int) e.getX();

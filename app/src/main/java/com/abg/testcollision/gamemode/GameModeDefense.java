@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
 import com.abg.testcollision.R;
 import com.abg.testcollision.entity.Bullet;
@@ -21,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class GameViewDefense extends GameMode implements Runnable {
+public class GameModeDefense extends GameMode implements Runnable {
 
     /**
      * Объект класса GameLoopThread
@@ -57,7 +56,7 @@ public class GameViewDefense extends GameMode implements Runnable {
      */
     private boolean running = false;
 
-    public GameViewDefense(Context context, AttributeSet attrs) {
+    public GameModeDefense(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         mThread = new GameThread(this);

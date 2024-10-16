@@ -1,49 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.abg.testcollision.gamemode.GameModeAssault
-        android:id="@+id/gameView"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passEnemy" />
-
-    <TextView
-        android:id="@+id/passEnemy"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Enemy pass: 0"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Score: 0"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <Button
-        android:id="@+id/build"
-        android:text="build"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/shoot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="shoot"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

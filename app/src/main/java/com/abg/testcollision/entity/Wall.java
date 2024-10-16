@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.abg.testcollision.gamemode.GameMode;
-import com.abg.testcollision.gamemode.GameViewDefense;
 
 public class Wall extends GameObject {
     GameMode gameView;
