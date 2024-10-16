@@ -1,4 +1,4 @@
-package com.abg.testcollision;
+package com.abg.testcollision.gamemode;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,11 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.abg.testcollision.R;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
 import com.abg.testcollision.entity.Player;
@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class GameView extends SurfaceView implements Runnable {
+public class GameViewDefense extends SurfaceView implements Runnable {
 
     /**
      * Объект класса GameLoopThread
@@ -46,6 +46,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Thread threadEnemy = new Thread(this);
     private ChangeCountListener changeCountListener;
+    Random rnd = new Random();
 
     public void setChangeCountListener(ChangeCountListener changeCountListener) {
         this.changeCountListener = changeCountListener;
@@ -56,7 +57,7 @@ public class GameView extends SurfaceView implements Runnable {
      */
     private boolean running = false;
 
-    public GameView(Context context, AttributeSet attrs) {
+    public GameViewDefense(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         mThread = new GameThread(this);
@@ -99,7 +100,6 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (true) {
-            Random rnd = new Random();
             try {
                 Thread.sleep(rnd.nextInt(2000));
                 enemy.add(new Enemy(this, enemies, 1580, 720));
@@ -116,12 +116,12 @@ public class GameView extends SurfaceView implements Runnable {
         /**
          * Объект класса
          */
-        private GameView view;
+        private GameViewDefense view;
 
         /**
          * Конструктор класса
          */
-        public GameThread(GameView view) {
+        public GameThread(GameViewDefense view) {
             this.view = view;
         }
 
@@ -141,6 +141,7 @@ public class GameView extends SurfaceView implements Runnable {
                 try {
                     // подготовка Canvas-а
                     canvas = view.getHolder().lockCanvas();
+                    canvas.drawColor(Color.WHITE);
                     synchronized (view.getHolder()) {
                         // собственно рисование
                         onDraw(canvas);
@@ -163,7 +164,6 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(player.bmp, (getWidth() - 32) / 2, getHeight() - 100, null);
 
         Iterator<Wall> w = walls.iterator();
@@ -206,8 +206,8 @@ public class GameView extends SurfaceView implements Runnable {
             while (i.hasNext()) {
                 Enemy enemies = i.next();
 
-                if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width) / 2f)
-                        && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height) / 2f)) {
+                if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width))
+                        && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height))) {
                     i.remove();
                     b.remove();
                 }
@@ -224,7 +224,7 @@ public class GameView extends SurfaceView implements Runnable {
                 Enemy e = i.next();
                 if ((Math.abs(w.x - e.x) <= (w.width + e.width))
                         && (Math.abs(w.y - e.y) <= (w.height + e.height))) {
-                    e.speed = 0;
+                    e.speed = -2;
                     e.forward = false;
                     //wall.remove();
                 }
@@ -259,9 +259,9 @@ public class GameView extends SurfaceView implements Runnable {
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (state == State.SHOOT) {
-                ball.add(createSpriteBullet(R.drawable.coin, 0));
-                ball.add(createSpriteBullet(R.drawable.coin, 0.2f));
-                ball.add(createSpriteBullet(R.drawable.coin, -0.2f));
+                ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
+                ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
+                ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) * -1 / 10));
             } else {
                 walls.add(new Wall(this, wall, (int) e.getX(), (int) e.getY()));
             }

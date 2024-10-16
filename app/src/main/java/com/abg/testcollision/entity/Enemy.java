@@ -2,22 +2,20 @@ package com.abg.testcollision.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
-import com.abg.testcollision.GameView;
+import com.abg.testcollision.gamemode.GameViewDefense;
 
-import java.util.Locale;
 import java.util.Random;
 
 public class Enemy extends GameObject {
 
-    public GameView gameView;
+    public GameViewDefense gameView;
     public Bitmap bmp;
     public boolean forward = true;
     public int distance;
 
     /**Конструктор класса*/
-    public Enemy(GameView gameView, Bitmap bmp, int x, int y){
+    public Enemy(GameViewDefense gameView, Bitmap bmp, int x, int y){
         this.gameView = gameView;
         this.bmp = bmp;
 

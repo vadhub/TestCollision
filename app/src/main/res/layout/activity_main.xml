@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.abg.testcollision.GameView
+    <com.abg.testcollision.gamemode.GameViewDefense
         android:id="@+id/gameView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -14,12 +14,21 @@
 
     <TextView
         android:id="@+id/passEnemy"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="Enemy pass: 0"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Score: 0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/build"

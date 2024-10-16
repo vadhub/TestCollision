@@ -3,7 +3,7 @@ package com.abg.testcollision.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.abg.testcollision.GameView;
+import com.abg.testcollision.gamemode.GameViewDefense;
 
 public class Bullet extends GameObject{
     /**Картинка*/
@@ -11,10 +11,10 @@ public class Bullet extends GameObject{
 
     public double angle;
 
-    public GameView gameView;
+    public GameViewDefense gameView;
 
     /**Конструктор*/
-    public Bullet(GameView gameView, Bitmap bmp, int x, int y, float angleCorrect) {
+    public Bullet(GameViewDefense gameView, Bitmap bmp, int x, int y, float angleCorrect) {
         this.gameView=gameView;
         this.bmp=bmp;
         speed = 25;
