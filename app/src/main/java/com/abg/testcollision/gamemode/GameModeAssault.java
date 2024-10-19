@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import com.abg.testcollision.R;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
+import com.abg.testcollision.entity.Sprite;
 import com.abg.testcollision.entity.Wall;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class GameModeAssault extends GameMode implements Runnable {
     private int countPassEnemy;
 
     private List<Bullet> ball = new ArrayList<>();
+    Sprite bulletSprite;
 
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap players;
@@ -36,6 +39,7 @@ public class GameModeAssault extends GameMode implements Runnable {
     Random rnd = new Random();
 
     private Thread threadShot = new Thread(this);
+    private Thread threadExplosion;
 
     public void setChangeCountListener(ChangeCountListener changeCountListener) {
         this.changeCountListener = changeCountListener;
@@ -73,6 +77,9 @@ public class GameModeAssault extends GameMode implements Runnable {
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick_rotated);
+        Log.d("###okggg", BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet).getWidth()+" ");
+        bulletSprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet), 7);
+
     }
 
     @Override
@@ -141,21 +148,15 @@ public class GameModeAssault extends GameMode implements Runnable {
         Iterator<Enemy> i = enemy.iterator();
         while (i.hasNext()) {
             Enemy e = i.next();
-            if (e.x >= 1000 || e.x <= 1000) {
-                e.onDraw(canvas);
-            } else {
-                i.remove();
-            }
+            e.onDraw(canvas);
         }
+
+        bulletSprite.startAnimation(canvas, getWidth() / 2, getHeight() / 2);
 
         Iterator<Bullet> j = ball.iterator();
         while (j.hasNext()) {
             Bullet b = j.next();
-            if (b.x >= 1000 || b.x <= 1000) {
-                b.onDraw(canvas);
-            } else {
-                j.remove();
-            }
+            b.onDraw(canvas);
         }
     }
 
@@ -185,7 +186,7 @@ public class GameModeAssault extends GameMode implements Runnable {
                 Enemy e = i.next();
                 if ((Math.abs(w.x - e.x) <= (w.width + e.width))
                         && (Math.abs(w.y - e.y) <= (w.height + e.height))) {
-                    e.speed = -2;
+                    //e.speed = -2;
                     e.forward = false;
                     //wall.remove();
                 }
