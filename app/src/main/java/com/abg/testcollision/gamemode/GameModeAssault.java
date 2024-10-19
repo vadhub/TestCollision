@@ -27,7 +27,8 @@ public class GameModeAssault extends GameMode implements Runnable {
     private int countPassEnemy;
 
     private List<Bullet> ball = new ArrayList<>();
-    Sprite bulletSprite;
+    private List<Sprite> explosions = new ArrayList<>();
+    Bitmap bulletSprite;
 
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap players;
@@ -39,7 +40,6 @@ public class GameModeAssault extends GameMode implements Runnable {
     Random rnd = new Random();
 
     private Thread threadShot = new Thread(this);
-    private Thread threadExplosion;
 
     public void setChangeCountListener(ChangeCountListener changeCountListener) {
         this.changeCountListener = changeCountListener;
@@ -77,8 +77,7 @@ public class GameModeAssault extends GameMode implements Runnable {
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick_rotated);
-        Log.d("###okggg", BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet).getWidth()+" ");
-        bulletSprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet), 7);
+        bulletSprite = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
 
     }
 
@@ -151,12 +150,17 @@ public class GameModeAssault extends GameMode implements Runnable {
             e.onDraw(canvas);
         }
 
-        bulletSprite.startAnimation(canvas, getWidth() / 2, getHeight() / 2);
-
         Iterator<Bullet> j = ball.iterator();
         while (j.hasNext()) {
             Bullet b = j.next();
             b.onDraw(canvas);
+        }
+
+        Iterator<Sprite> s = explosions.iterator();
+        while (s.hasNext()) {
+            Sprite sprite = s.next();
+            sprite.startAnimation(canvas, s::remove);
+
         }
     }
 
@@ -170,6 +174,7 @@ public class GameModeAssault extends GameMode implements Runnable {
 
                 if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width))
                         && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height))) {
+                    explosions.add(new Sprite(bulletSprite, balls.x, balls.y, 7));
                     i.remove();
                     b.remove();
                 }
