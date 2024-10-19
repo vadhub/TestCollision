@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 
 import com.abg.testcollision.gamemode.GameMode;
 
-public class Bullet extends GameObject{
+public class Bullet extends GameObject {
     /**Картинка*/
     private Bitmap bmp;
 
@@ -24,9 +24,9 @@ public class Bullet extends GameObject{
         this.width = 27;       //ширина снаряда
         this.height = 40;      //высота снаряда
 
-        //угол полета пули в зависипости от координаты косания к экрану
-        angle = Math.atan2(gameView.shotY - y, gameView.shotX - x) + angleCorrect;
+        angle = Math.atan2(gameView.yClick - y, gameView.xClick - x) + angleCorrect;
     }
+
 
     /**Перемещение объекта, его направление*/
     private void update() {

@@ -6,8 +6,8 @@ import android.view.SurfaceView;
 
 public class GameMode extends SurfaceView {
 
-    public int shotX;
-    public int shotY;
+    public int xClick;
+    public int yClick;
 
     public GameMode(Context context, AttributeSet attrs) {
         super(context, attrs);

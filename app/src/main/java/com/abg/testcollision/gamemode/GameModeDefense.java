@@ -13,6 +13,7 @@ import com.abg.testcollision.R;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
 import com.abg.testcollision.entity.Player;
+import com.abg.testcollision.entity.Sprite;
 import com.abg.testcollision.entity.Wall;
 
 import java.util.ArrayList;
@@ -30,12 +31,12 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     private State state = State.BUILD;
 
-    public int shotX;
-    public int shotY;
-
     private List<Bullet> ball = new ArrayList<>();
     private Player player;
     Bitmap players;
+
+    private List<Sprite> explosions = new ArrayList<>();
+    Bitmap explosion;
 
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap enemies;
@@ -94,6 +95,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
         enemies = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
+        explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
     }
 
     @Override
@@ -178,21 +180,20 @@ public class GameModeDefense extends GameMode implements Runnable {
         Iterator<Enemy> i = enemy.iterator();
         while (i.hasNext()) {
             Enemy e = i.next();
-            if (e.x >= 1000 || e.x <= 1000) {
-                e.onDraw(canvas);
-            } else {
-                i.remove();
-            }
+            e.onDraw(canvas);
         }
 
         Iterator<Bullet> j = ball.iterator();
         while (j.hasNext()) {
             Bullet b = j.next();
-            if (b.x >= 1000 || b.x <= 1000) {
-                b.onDraw(canvas);
-            } else {
-                j.remove();
-            }
+            b.onDraw(canvas);
+        }
+
+        Iterator<Sprite> s = explosions.iterator();
+        while (s.hasNext()) {
+            Sprite sprite = s.next();
+            sprite.startAnimation(canvas, s::remove);
+
         }
     }
 
@@ -207,6 +208,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
                 if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width))
                         && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height))) {
+                    explosions.add(new Sprite(explosion, balls.x, balls.y, 7));
                     i.remove();
                     b.remove();
                 }
@@ -225,7 +227,6 @@ public class GameModeDefense extends GameMode implements Runnable {
                         && (Math.abs(w.y - e.y) <= (w.height + e.height))) {
                     e.speed = -2;
                     e.forward = false;
-                    //wall.remove();
                 }
             }
         }
@@ -253,8 +254,8 @@ public class GameModeDefense extends GameMode implements Runnable {
     }
 
     public boolean onTouchEvent(MotionEvent e) {
-        shotX = (int) e.getX();
-        shotY = (int) e.getY();
+        xClick = (int) e.getX();
+        yClick = (int) e.getY();
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (state == State.SHOOT) {

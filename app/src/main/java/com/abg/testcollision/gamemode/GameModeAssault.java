@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -28,7 +27,7 @@ public class GameModeAssault extends GameMode implements Runnable {
 
     private List<Bullet> ball = new ArrayList<>();
     private List<Sprite> explosions = new ArrayList<>();
-    Bitmap bulletSprite;
+    Bitmap explosion;
 
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap players;
@@ -77,7 +76,7 @@ public class GameModeAssault extends GameMode implements Runnable {
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick_rotated);
-        bulletSprite = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
+        explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
 
     }
 
@@ -160,7 +159,6 @@ public class GameModeAssault extends GameMode implements Runnable {
         while (s.hasNext()) {
             Sprite sprite = s.next();
             sprite.startAnimation(canvas, s::remove);
-
         }
     }
 
@@ -174,7 +172,7 @@ public class GameModeAssault extends GameMode implements Runnable {
 
                 if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width))
                         && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height))) {
-                    explosions.add(new Sprite(bulletSprite, balls.x, balls.y, 7));
+                    explosions.add(new Sprite(explosion, balls.x, balls.y, 7));
                     i.remove();
                     b.remove();
                 }
@@ -234,11 +232,11 @@ public class GameModeAssault extends GameMode implements Runnable {
     }
 
     public boolean onTouchEvent(MotionEvent e) {
-        shotX = (int) e.getX();
-        shotY = (int) e.getY();
+        xClick = (int) e.getX();
+        yClick = (int) e.getY();
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            enemy.add(new Enemy(this, players, shotX, shotY, 6,true));
+            enemy.add(new Enemy(this, players, xClick, yClick, 6,true));
         }
         return true;
     }
