@@ -92,14 +92,12 @@ public class GameModeDefense extends GameMode implements Runnable {
             }
         });
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        players = BitmapFactory.decodeResource(getResources(), R.drawable.player, options);
+        players = BitmapFactory.decodeResource(getResources(), R.drawable.player);
 
         player = new Player((getWidth() - 32) / 2, getHeight() - 100, players);
+
         enemies = BitmapFactory.decodeResource(getResources(), R.drawable.truk);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
-
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
     }
 
@@ -170,7 +168,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
 
     protected void onDraw(Canvas canvas) {
-        player.sprite.startAnimation(canvas, () -> {});
+        player.onDraw(canvas,(getWidth() - 32) / 2, getHeight() / 2);
 
         Iterator<Wall> w = walls.iterator();
         while (w.hasNext()) {

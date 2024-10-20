@@ -17,12 +17,11 @@ public class Player extends GameObject{
         this.bmp = bmp;                    //возвращаем рисунок
         this.x = x;                        //отступ по х нет
         this.y = y; //делаем по центру
-        sprite = new Sprite(bmp, x, y,4);
-        Log.d("!!!1", bmp.getHeight() +" " + bmp.getWidth());
+        sprite = new Sprite(bmp, x, y,3);
     }
 
     //рисуем наш спрайт
-    public void onDraw(Canvas c) {
-        sprite.startAnimation(c, () -> { });
+    public void onDraw(Canvas c, int x, int y) {
+        sprite.startAnimation(c, x, y, 100, () -> { });
     }
 }
