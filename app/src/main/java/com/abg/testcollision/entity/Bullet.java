@@ -1,7 +1,10 @@
 package com.abg.testcollision.entity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.util.Log;
 
 import com.abg.testcollision.gamemode.GameMode;
 
@@ -10,21 +13,25 @@ public class Bullet extends GameObject {
     private Bitmap bmp;
 
     public double angle;
+    private int damage;
+    private Matrix matrix = new Matrix();
 
     public GameMode gameView;
 
     /**Конструктор*/
-    public Bullet(GameMode gameView, Bitmap bmp, int x, int y, float angleCorrect) {
+    public Bullet(GameMode gameView, Bitmap bmp, int x, int y, float angleCorrect, int damage) {
         this.gameView=gameView;
-        this.bmp=bmp;
         speed = 25;
 
         this.x = x;            //позиция по Х
         this.y = y;          //позиция по У
         this.width = 27;       //ширина снаряда
         this.height = 40;      //высота снаряда
-
         angle = Math.atan2(gameView.yClick - y, gameView.xClick - x) + angleCorrect;
+
+        Log.d("!!!", angle+"");
+        matrix.setRotate((float) (Math.cos(angle)));
+        this.bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getHeight(), bmp.getWidth(), matrix,true);
     }
 
 

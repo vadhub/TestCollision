@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -90,11 +92,14 @@ public class GameModeDefense extends GameMode implements Runnable {
             }
         });
 
-        players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
-        player = new Player(this, players);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        players = BitmapFactory.decodeResource(getResources(), R.drawable.player, options);
 
-        enemies = BitmapFactory.decodeResource(getResources(), R.drawable.enemy);
+        player = new Player((getWidth() - 32) / 2, getHeight() - 100, players);
+        enemies = BitmapFactory.decodeResource(getResources(), R.drawable.truk);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
+
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
     }
 
@@ -165,7 +170,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(player.bmp, (getWidth() - 32) / 2, getHeight() - 100, null);
+        player.sprite.startAnimation(canvas, () -> {});
 
         Iterator<Wall> w = walls.iterator();
         while (w.hasNext()) {
@@ -250,7 +255,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     public Bullet createSpriteBullet(int resource, float angleCorrect) {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
-        return new Bullet(this, bmp, getWidth() / 2, getHeight() - 60, angleCorrect);
+        return new Bullet(this, bmp, getWidth() / 2, getHeight() - 60, angleCorrect,1);
     }
 
     public boolean onTouchEvent(MotionEvent e) {
@@ -259,9 +264,9 @@ public class GameModeDefense extends GameMode implements Runnable {
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (state == State.SHOOT) {
-                ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
-                ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
-                ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) * -1 / 10));
+                ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) / 10));
+                ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) / 10));
+                ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) * -1 / 10));
             } else {
                 walls.add(new Wall(this, wall, (int) e.getX(), (int) e.getY()));
             }

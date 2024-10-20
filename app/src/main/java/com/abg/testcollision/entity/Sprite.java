@@ -3,6 +3,7 @@ package com.abg.testcollision.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 public class Sprite {
     private final Bitmap bitmap;
@@ -11,8 +12,8 @@ public class Sprite {
     private int currentFrame = 0;
     private final int frames;
     private long prevTime = System.currentTimeMillis();
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
 
     public Sprite(Bitmap bitmap, int x, int y, int frames) {
         this.bitmap = bitmap;
@@ -33,6 +34,7 @@ public class Sprite {
             if ((nextTime - prevTime) >= 50) {
                 currentFrame++;
                 prevTime = nextTime;
+                Log.d("$$$$", "ok");
             }
         } else {
             listener.stop();
@@ -40,8 +42,6 @@ public class Sprite {
         }
         Rect src = new Rect(srcX, 0, srcX+widthFrame, srcY);
         Rect dst = new Rect(x, y, x + widthFrame, y + srcY);
-
         canvas.drawBitmap(bitmap, src, dst, null);
     }
-
 }

@@ -215,13 +215,13 @@ public class GameModeAssault extends GameMode implements Runnable {
 
     public Bullet createSpriteBullet(int resource, float angleCorrect) {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
-        return new Bullet(this, bmp, getWidth() / 2,60, angleCorrect);
+        return new Bullet(this, bmp, getWidth() / 2,60, angleCorrect, 1);
     }
 
     public void shot() {
-        ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(3) / 10));
-        ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) / 10));
-        ball.add(createSpriteBullet(R.drawable.coin, (float) rnd.nextInt(2) * -1 / 10));
+        ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(3) / 10));
+        ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) / 10));
+        ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) * -1 / 10));
     }
 
     public void generateMap() {
