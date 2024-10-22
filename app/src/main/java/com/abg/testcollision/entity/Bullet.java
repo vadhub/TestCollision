@@ -29,8 +29,9 @@ public class Bullet extends GameObject {
         this.height = 40;      //высота снаряда
         angle = Math.atan2(gameView.yClick - y, gameView.xClick - x) + angleCorrect;
 
-        Log.d("!!!", angle+"");
-        matrix.setRotate((float) (Math.cos(angle)));
+        float a = (float) (Math.atan2(gameView.yClick - y, gameView.xClick - x) * 180 / Math.PI) + 90;
+        Log.d("!!!", gameView.xClick+" "+gameView.yClick + " | " + x +" " + y + " " + a);
+        matrix.setRotate(a);
         this.bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getHeight(), bmp.getWidth(), matrix,true);
     }
 
