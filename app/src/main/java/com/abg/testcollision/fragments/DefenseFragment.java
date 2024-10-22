@@ -25,10 +25,12 @@ public class DefenseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView countPassEnemy = view.findViewById(R.id.passEnemy);
+        TextView scoreTextView = view.findViewById(R.id.score);
         GameModeDefense gameView = view.findViewById(R.id.gameView);
         gameView.setZOrderOnTop(true);
         gameView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         gameView.setChangeCountListener(count ->  countPassEnemy.setText("Pass enemy: " + count));
+        gameView.setChangeScoreListener(score -> scoreTextView.setText("Score" + score));
         Button building = view.findViewById(R.id.build);
         Button shoot = view.findViewById(R.id.shoot);
         building.setOnClickListener(v -> gameView.setState(GameModeDefense.State.BUILD));

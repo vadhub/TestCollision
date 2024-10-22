@@ -29,6 +29,7 @@ public class GameModeDefense extends GameMode implements Runnable {
      */
     private GameThread mThread;
     private int countPassEnemy;
+    private int score;
 
     private State state = State.SHOOT;
 
@@ -48,16 +49,22 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     private Thread threadEnemy = new Thread(this);
     private ChangeCountListener changeCountListener;
+    private ChangeScoreListener changeScoreListener;
     Random rnd = new Random();
 
     public void setChangeCountListener(ChangeCountListener changeCountListener) {
         this.changeCountListener = changeCountListener;
     }
 
+    public void setChangeScoreListener(ChangeScoreListener changeScoreListener) {
+        this.changeScoreListener = changeScoreListener;
+    }
+
     /**
      * Переменная запускающая поток рисования
      */
     private boolean running = false;
+    private boolean startGame = true;
 
     public GameModeDefense(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -102,14 +109,12 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (startGame) {
             try {
                 Thread.sleep(rnd.nextInt(2000));
-                if (rnd.nextInt() % 2 == 0) {
                     enemy.add(new Enemy(this, enemies,6, 1580, 720));
-                } else {
+                    enemy.add(new Enemy(this, enemies,6, 1580, 620));
                     enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720));
-                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -199,7 +204,6 @@ public class GameModeDefense extends GameMode implements Runnable {
         while (s.hasNext()) {
             Sprite sprite = s.next();
             sprite.startAnimation(canvas, s::remove);
-
         }
     }
 
@@ -217,6 +221,7 @@ public class GameModeDefense extends GameMode implements Runnable {
                     explosions.add(new Sprite(explosion, balls.x, balls.y, 7));
                     i.remove();
                     b.remove();
+                    changeScoreListener.changeScore(score+=10);
                 }
             }
         }
