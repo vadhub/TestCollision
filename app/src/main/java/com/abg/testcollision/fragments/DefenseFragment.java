@@ -2,6 +2,7 @@ package com.abg.testcollision.fragments;
 
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,10 @@ import androidx.fragment.app.Fragment;
 import com.abg.testcollision.R;
 import com.abg.testcollision.gamemode.GameModeDefense;
 
+import java.util.Timer;
+
 public class DefenseFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,5 +40,17 @@ public class DefenseFragment extends Fragment {
         building.setOnClickListener(v -> gameView.setState(GameModeDefense.State.BUILD));
         shoot.setOnClickListener(v -> gameView.setState(GameModeDefense.State.SHOOT));
         countPassEnemy.setText("ok");
+
+         new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                gameView.setStartGame(false);
+            }
+        }.start();
     }
 }

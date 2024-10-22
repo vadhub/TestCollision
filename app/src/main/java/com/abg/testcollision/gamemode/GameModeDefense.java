@@ -30,6 +30,7 @@ public class GameModeDefense extends GameMode implements Runnable {
     private GameThread mThread;
     private int countPassEnemy;
     private int score;
+    private long prevTime;
 
     private State state = State.SHOOT;
 
@@ -60,6 +61,14 @@ public class GameModeDefense extends GameMode implements Runnable {
         this.changeScoreListener = changeScoreListener;
     }
 
+    public boolean isStartGame() {
+        return startGame;
+    }
+
+    public void setStartGame(boolean startGame) {
+        this.startGame = startGame;
+    }
+
     /**
      * Переменная запускающая поток рисования
      */
@@ -71,6 +80,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
         mThread = new GameThread(this);
         threadEnemy.start();
+        prevTime = System.currentTimeMillis();
 
         /*Рисуем все наши объекты и все все все*/
         getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -110,13 +120,11 @@ public class GameModeDefense extends GameMode implements Runnable {
     @Override
     public void run() {
         while (startGame) {
-            try {
-                Thread.sleep(rnd.nextInt(2000));
-                    enemy.add(new Enemy(this, enemies,6, 1580, 720, 1));
-                    enemy.add(new Enemy(this, enemies,6, 1580, 620, 3));
-                    enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720, 3));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            long newTime = System.currentTimeMillis();
+            if ((newTime - prevTime) > 2000) {
+                enemy.add(new Enemy(this, enemies, 6, 1580, 720, 1));
+                enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720, 3));
+                prevTime = newTime;
             }
         }
     }
