@@ -16,11 +16,16 @@ public class Enemy extends GameObject {
     public int distance;
     public boolean vector;
     private Sprite sprite;
+    private int hp;
+
+    public interface Destroy {
+        void onDestroy();
+    }
 
     /**
      * Конструктор класса
      */
-    public Enemy(GameMode gameView, Bitmap bmp, int speed, int x, int y) {
+    public Enemy(GameMode gameView, Bitmap bmp, int speed, int x, int y, int hp) {
         this.gameView = gameView;
         this.bmp = bmp;
 
@@ -31,6 +36,8 @@ public class Enemy extends GameObject {
 
         this.width = 32;
         this.height = 32;
+
+        this.hp = hp;
 
         sprite = new Sprite(bmp, 0, 0, 2);
     }
@@ -49,6 +56,14 @@ public class Enemy extends GameObject {
         this.width = 32;
         this.height = 32;
         this.vector = vector;
+    }
+
+    public void damage(Destroy destroy) {
+        if (hp > 0) {
+            hp--;
+        } else {
+            destroy.onDestroy();
+        }
     }
 
 

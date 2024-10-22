@@ -112,9 +112,9 @@ public class GameModeDefense extends GameMode implements Runnable {
         while (startGame) {
             try {
                 Thread.sleep(rnd.nextInt(2000));
-                    enemy.add(new Enemy(this, enemies,6, 1580, 720));
-                    enemy.add(new Enemy(this, enemies,6, 1580, 620));
-                    enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720));
+                    enemy.add(new Enemy(this, enemies,6, 1580, 720, 1));
+                    enemy.add(new Enemy(this, enemies,6, 1580, 620, 3));
+                    enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720, 3));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -219,9 +219,12 @@ public class GameModeDefense extends GameMode implements Runnable {
                 if ((Math.abs(balls.x - enemies.x) <= (balls.width + enemies.width))
                         && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height))) {
                     explosions.add(new Sprite(explosion, balls.x, balls.y, 7));
-                    i.remove();
+                    enemies.damage(() -> {
+                        i.remove();
+                        changeScoreListener.changeScore(score+=10);
+                    });
+
                     b.remove();
-                    changeScoreListener.changeScore(score+=10);
                 }
             }
         }
