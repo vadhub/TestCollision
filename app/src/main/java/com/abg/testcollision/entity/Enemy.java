@@ -20,14 +20,14 @@ public class Enemy extends GameObject {
     /**
      * Конструктор класса
      */
-    public Enemy(GameMode gameView, Bitmap bmp, int x, int y) {
+    public Enemy(GameMode gameView, Bitmap bmp, int speed, int x, int y) {
         this.gameView = gameView;
         this.bmp = bmp;
 
         Random rnd = new Random();
         this.x = x;
         this.y = rnd.nextInt(y);
-        this.speed = rnd.nextInt(10) + 3;
+        this.speed =  speed;
 
         this.width = 32;
         this.height = 32;

@@ -14,7 +14,7 @@ public class Player extends GameObject{
         this.bmp = bmp;                    //возвращаем рисунок
         this.x = x;                        //отступ по х нет
         this.y = y; //делаем по центру
-        sprite = new Sprite(bmp, x, y,3);
+        sprite = new Sprite(bmp, x, y,4);
     }
 
     //рисуем наш спрайт

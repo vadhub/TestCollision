@@ -41,6 +41,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap enemies;
+    Bitmap btrEnemy;
 
     private List<Wall> walls = new ArrayList<>();
     Bitmap wall;
@@ -91,9 +92,10 @@ public class GameModeDefense extends GameMode implements Runnable {
             }
         });
 
-        players = BitmapFactory.decodeResource(getResources(), R.drawable.player);
+        players = BitmapFactory.decodeResource(getResources(), R.drawable.canon_fire);
         player = new Player(0, 0, players);
         enemies = BitmapFactory.decodeResource(getResources(), R.drawable.trukamo_left);
+        btrEnemy = BitmapFactory.decodeResource(getResources(), R.drawable.btr);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
     }
@@ -103,7 +105,11 @@ public class GameModeDefense extends GameMode implements Runnable {
         while (true) {
             try {
                 Thread.sleep(rnd.nextInt(2000));
-                enemy.add(new Enemy(this, enemies, 1580, 720));
+                if (rnd.nextInt() % 2 == 0) {
+                    enemy.add(new Enemy(this, enemies,6, 1580, 720));
+                } else {
+                    enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720));
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -165,7 +171,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
 
     protected void onDraw(Canvas canvas) {
-        player.onDraw(canvas,(getWidth() - 32) / 2, getHeight() - 64);
+        player.onDraw(canvas,(getWidth() / 2) - 32, getHeight() - 256);
 
         Iterator<Wall> w = walls.iterator();
         while (w.hasNext()) {

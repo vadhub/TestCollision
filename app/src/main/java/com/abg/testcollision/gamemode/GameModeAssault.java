@@ -74,7 +74,7 @@ public class GameModeAssault extends GameMode implements Runnable {
             }
         });
 
-        players = BitmapFactory.decodeResource(getResources(), R.drawable.part);
+        players = BitmapFactory.decodeResource(getResources(), R.drawable.canon_fire);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick_rotated);
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
 
