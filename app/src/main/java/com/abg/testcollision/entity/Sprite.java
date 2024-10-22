@@ -3,7 +3,6 @@ package com.abg.testcollision.entity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 public class Sprite {
     private final Bitmap bitmap;
@@ -39,12 +38,13 @@ public class Sprite {
             listener.stop();
             currentFrame = 0;
         }
+
         Rect src = new Rect(srcX, 0, srcX+widthFrame, srcY);
         Rect dst = new Rect(x, y, x + widthFrame, y + srcY);
         canvas.drawBitmap(bitmap, src, dst, null);
     }
 
-    public void startAnimation(Canvas canvas, int x, int y, int fps, StopAnimationListener listener) {
+    public void startAnimation(Canvas canvas, int x, int y, int fps, int scale, StopAnimationListener listener) {
 
         int srcX = currentFrame * widthFrame;
         int srcY = height;
@@ -59,9 +59,8 @@ public class Sprite {
             currentFrame = 0;
         }
 
-        Log.d("@@@", currentFrame +" " + srcX +" " + bitmap.getWidth());
         Rect src = new Rect(srcX, 0, srcX+widthFrame, srcY);
-        Rect dst = new Rect(x, y, x + widthFrame, y + srcY);
+        Rect dst = new Rect(x, y, x + widthFrame + scale, y + srcY + scale);
         canvas.drawBitmap(bitmap, src, dst, null);
     }
 }

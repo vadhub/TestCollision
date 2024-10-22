@@ -2,9 +2,6 @@ package com.abg.testcollision.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
-
-import com.abg.testcollision.gamemode.GameMode;
 
 public class Player extends GameObject{
 
@@ -22,6 +19,6 @@ public class Player extends GameObject{
 
     //рисуем наш спрайт
     public void onDraw(Canvas c, int x, int y) {
-        sprite.startAnimation(c, x, y, 100, () -> { });
+        sprite.startAnimation(c, x, y, 100, 1, () -> {});
     }
 }

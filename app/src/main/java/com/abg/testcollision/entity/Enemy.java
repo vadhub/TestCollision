@@ -15,6 +15,7 @@ public class Enemy extends GameObject {
     public boolean forward = true;
     public int distance;
     public boolean vector;
+    private Sprite sprite;
 
     /**
      * Конструктор класса
@@ -30,6 +31,8 @@ public class Enemy extends GameObject {
 
         this.width = 32;
         this.height = 32;
+
+        sprite = new Sprite(bmp, 0, 0, 2);
     }
 
     /**
@@ -88,6 +91,17 @@ public class Enemy extends GameObject {
     public void onDraw(Canvas c) {
 
         c.drawBitmap(bmp, x, y, null);
+
+        if (!vector) {
+            update();
+        } else {
+            updateToUp();
+        }
+    }
+
+    public void onDrawSprites(Canvas c) {
+
+        sprite.startAnimation(c, x, y, 150, 20, () -> {});
 
         if (!vector) {
             update();
