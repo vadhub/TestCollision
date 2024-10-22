@@ -1,5 +1,6 @@
 package com.abg.testcollision.fragments;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ public class DefenseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView countPassEnemy = view.findViewById(R.id.passEnemy);
         GameModeDefense gameView = view.findViewById(R.id.gameView);
+        gameView.setZOrderOnTop(true);
+        gameView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         gameView.setChangeCountListener(count ->  countPassEnemy.setText("Pass enemy: " + count));
         Button building = view.findViewById(R.id.build);
         Button shoot = view.findViewById(R.id.shoot);

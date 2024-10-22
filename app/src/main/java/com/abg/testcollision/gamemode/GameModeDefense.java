@@ -5,9 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -31,7 +30,7 @@ public class GameModeDefense extends GameMode implements Runnable {
     private GameThread mThread;
     private int countPassEnemy;
 
-    private State state = State.BUILD;
+    private State state = State.SHOOT;
 
     private List<Bullet> ball = new ArrayList<>();
     private Player player;
@@ -93,10 +92,8 @@ public class GameModeDefense extends GameMode implements Runnable {
         });
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.player);
-
-        player = new Player((getWidth() - 32) / 2, getHeight() - 100, players);
-
-        enemies = BitmapFactory.decodeResource(getResources(), R.drawable.truk);
+        player = new Player(0, 0, players);
+        enemies = BitmapFactory.decodeResource(getResources(), R.drawable.trukamo_left);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
     }
@@ -140,12 +137,12 @@ public class GameModeDefense extends GameMode implements Runnable {
          * Действия, выполняемые в потоке
          */
         public void run() {
+            Canvas canvas = null;
             while (running) {
-                Canvas canvas = null;
                 try {
                     // подготовка Canvas-а
                     canvas = view.getHolder().lockCanvas();
-                    canvas.drawColor(Color.WHITE);
+                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                     synchronized (view.getHolder()) {
                         // собственно рисование
                         onDraw(canvas);
@@ -168,7 +165,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
 
     protected void onDraw(Canvas canvas) {
-        player.onDraw(canvas,(getWidth() - 32) / 2, getHeight() / 2);
+        player.onDraw(canvas,(getWidth() - 32) / 2, getHeight() - 64);
 
         Iterator<Wall> w = walls.iterator();
         while (w.hasNext()) {
@@ -183,7 +180,7 @@ public class GameModeDefense extends GameMode implements Runnable {
         Iterator<Enemy> i = enemy.iterator();
         while (i.hasNext()) {
             Enemy e = i.next();
-            e.onDraw(canvas);
+            e.onDrawSprites(canvas);
         }
 
         Iterator<Bullet> j = ball.iterator();
