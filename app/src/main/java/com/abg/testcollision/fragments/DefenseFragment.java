@@ -41,16 +41,16 @@ public class DefenseFragment extends Fragment {
         shoot.setOnClickListener(v -> gameView.setState(GameModeDefense.State.SHOOT));
         countPassEnemy.setText("ok");
 
-         new CountDownTimer(4000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                gameView.setStartGame(false);
-            }
-        }.start();
+//         new CountDownTimer(4000, 1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                gameView.setStartGame(false);
+//            }
+//        }.start();
     }
 }

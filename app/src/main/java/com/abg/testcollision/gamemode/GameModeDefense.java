@@ -1,5 +1,6 @@
 package com.abg.testcollision.gamemode;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,10 +8,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import com.abg.testcollision.R;
+import com.abg.testcollision.entity.Btr;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
 import com.abg.testcollision.entity.Player;
@@ -37,6 +40,7 @@ public class GameModeDefense extends GameMode implements Runnable {
     private List<Bullet> ball = new ArrayList<>();
     private Player player;
     Bitmap players;
+    Bitmap cannon;
 
     private List<Sprite> explosions = new ArrayList<>();
     Bitmap explosion;
@@ -59,14 +63,6 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     public void setChangeScoreListener(ChangeScoreListener changeScoreListener) {
         this.changeScoreListener = changeScoreListener;
-    }
-
-    public boolean isStartGame() {
-        return startGame;
-    }
-
-    public void setStartGame(boolean startGame) {
-        this.startGame = startGame;
     }
 
     /**
@@ -115,6 +111,7 @@ public class GameModeDefense extends GameMode implements Runnable {
         btrEnemy = BitmapFactory.decodeResource(getResources(), R.drawable.btr);
         wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
+        cannon = BitmapFactory.decodeResource(getResources(), R.drawable.tower);
     }
 
     @Override
@@ -123,7 +120,7 @@ public class GameModeDefense extends GameMode implements Runnable {
             long newTime = System.currentTimeMillis();
             if ((newTime - prevTime) > 2000) {
                 enemy.add(new Enemy(this, enemies, 6, 1580, 720, 1));
-                enemy.add(new Enemy(this, btrEnemy, 3, 1580, 720, 3));
+                enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 620, 3));
                 prevTime = newTime;
             }
         }
@@ -183,6 +180,7 @@ public class GameModeDefense extends GameMode implements Runnable {
     //-------------End of GameThread--------------------------------------------------\\
 
 
+    @SuppressLint("DrawAllocation")
     protected void onDraw(Canvas canvas) {
         player.onDraw(canvas,(getWidth() / 2) - 32, getHeight() - 256);
 
@@ -200,6 +198,10 @@ public class GameModeDefense extends GameMode implements Runnable {
         while (i.hasNext()) {
             Enemy e = i.next();
             e.onDrawSprites(canvas);
+            if (e instanceof Btr) {
+                Btr b = (Btr) e;
+                b.shot(() -> ball.add(createSpriteBulletFromBtr(R.drawable.bullet,  b.x, b.y + 60)));
+            }
         }
 
         Iterator<Bullet> j = ball.iterator();
@@ -273,6 +275,11 @@ public class GameModeDefense extends GameMode implements Runnable {
     public Bullet createSpriteBullet(int resource, float angleCorrect) {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
         return new Bullet(this, bmp, getWidth() / 2, getHeight() - 60, angleCorrect,1);
+    }
+
+    public Bullet createSpriteBulletFromBtr(int resource, int x, int y) {
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), resource);
+        return new Bullet(bmp, x, y);
     }
 
     public boolean onTouchEvent(MotionEvent e) {

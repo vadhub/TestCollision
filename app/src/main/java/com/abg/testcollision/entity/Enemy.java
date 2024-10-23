@@ -15,8 +15,8 @@ public class Enemy extends GameObject {
     public boolean forward = true;
     public int distance;
     public boolean vector;
-    private Sprite sprite;
-    private int hp;
+    protected Sprite sprite;
+    protected int hp;
 
     public interface Destroy {
         void onDestroy();
@@ -56,6 +56,9 @@ public class Enemy extends GameObject {
         this.width = 32;
         this.height = 32;
         this.vector = vector;
+    }
+
+    public Enemy() {
     }
 
     public void damage(Destroy destroy) {
