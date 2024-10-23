@@ -69,7 +69,15 @@ public class GameModeDefense extends GameMode implements Runnable {
      * Переменная запускающая поток рисования
      */
     private boolean running = false;
-    private boolean startGame = true;
+    private boolean startGame = false;
+
+    public boolean isStartGame() {
+        return startGame;
+    }
+
+    public void setStartGame(boolean startGame) {
+        this.startGame = startGame;
+    }
 
     public GameModeDefense(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -116,12 +124,14 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     @Override
     public void run() {
-        while (startGame) {
-            long newTime = System.currentTimeMillis();
-            if ((newTime - prevTime) > 2000) {
-                enemy.add(new Enemy(this, enemies, 6, 1580, 720, 1));
-                enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 620, 3));
-                prevTime = newTime;
+        while (true) {
+            if (startGame) {
+                long newTime = System.currentTimeMillis();
+                if ((newTime - prevTime) > 2000) {
+                    enemy.add(new Enemy(this, enemies, 6, 1580, 720, 1));
+                    enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 620, 3));
+                    prevTime = newTime;
+                }
             }
         }
     }

@@ -40,6 +40,11 @@ public class DefenseFragment extends Fragment {
         building.setOnClickListener(v -> gameView.setState(GameModeDefense.State.BUILD));
         shoot.setOnClickListener(v -> gameView.setState(GameModeDefense.State.SHOOT));
         countPassEnemy.setText("ok");
+        Button btnStart = view.findViewById(R.id.startGame);
+        btnStart.setOnClickListener(v -> {
+            gameView.setStartGame(true);
+            btnStart.setVisibility(View.GONE);
+        });
 
 //         new CountDownTimer(4000, 1000) {
 //            @Override
