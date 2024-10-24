@@ -12,6 +12,7 @@ import java.util.Random;
 public class Btr extends Enemy {
 
     private Bitmap cannon;
+    Random rnd = new Random();
     private long prevTime = System.currentTimeMillis();
     public interface ShotListener {
         void shot();
@@ -24,7 +25,7 @@ public class Btr extends Enemy {
         this.gameView = gameView;
         this.bmp = bmp;
 
-        Random rnd = new Random();
+
         this.x = x;
         this.y = rnd.nextInt(y);
         this.speed =  speed;
@@ -41,7 +42,7 @@ public class Btr extends Enemy {
 
     public void shot(ShotListener shotListener) {
         long newTime = System.currentTimeMillis();
-        if ((newTime - prevTime) > 1000) {
+        if ((newTime - prevTime) > (rnd.nextInt(1500)+800)) {
             shotListener.shot();
             prevTime = newTime;
         }
