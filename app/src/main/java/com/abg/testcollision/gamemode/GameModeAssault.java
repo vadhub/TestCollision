@@ -226,9 +226,9 @@ public class GameModeAssault extends GameMode implements Runnable {
 
     public void generateMap() {
         Random random = new Random();
-        walls.add(new Wall(this, wall, random.nextInt(getWidth()), getHeight() / 2));
-        walls.add(new Wall(this, wall, random.nextInt(getWidth()), getHeight() / 2));
-        walls.add(new Wall(this, wall, random.nextInt(getWidth()), getHeight() / 2));
+        walls.add(new Wall(getResources(), random.nextInt(getWidth()), getHeight() / 2));
+        walls.add(new Wall(getResources(), random.nextInt(getWidth()), getHeight() / 2));
+        walls.add(new Wall(getResources(), random.nextInt(getWidth()), getHeight() / 2));
     }
 
     public boolean onTouchEvent(MotionEvent e) {
