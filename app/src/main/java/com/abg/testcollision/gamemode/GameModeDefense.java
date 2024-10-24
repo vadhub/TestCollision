@@ -38,6 +38,7 @@ public class GameModeDefense extends GameMode implements Runnable {
     private State state = State.SHOOT;
 
     private List<Bullet> ball = new ArrayList<>();
+    private List<Bullet> bulletsEnemy = new ArrayList<>();
     private Player player;
     Bitmap players;
     Bitmap cannon;
@@ -50,7 +51,6 @@ public class GameModeDefense extends GameMode implements Runnable {
     Bitmap btrEnemy;
 
     private List<Wall> walls = new ArrayList<>();
-    Bitmap wall;
 
     private Thread threadEnemy = new Thread(this);
     private ChangeCountListener changeCountListener;
@@ -114,10 +114,9 @@ public class GameModeDefense extends GameMode implements Runnable {
         });
 
         players = BitmapFactory.decodeResource(getResources(), R.drawable.canon_fire);
-        player = new Player(0, 0, players);
+        player = new Player(0, 0, players, 3);
         enemies = BitmapFactory.decodeResource(getResources(), R.drawable.trukamo_left);
         btrEnemy = BitmapFactory.decodeResource(getResources(), R.drawable.btr);
-        wall = BitmapFactory.decodeResource(getResources(), R.drawable.brick);
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
         cannon = BitmapFactory.decodeResource(getResources(), R.drawable.tower);
     }
@@ -128,7 +127,8 @@ public class GameModeDefense extends GameMode implements Runnable {
             if (startGame) {
                 long newTime = System.currentTimeMillis();
                 if ((newTime - prevTime) > 2000) {
-                    enemy.add(new Enemy(this, enemies, 6, 1580, 720, 1));
+                    enemy.add(new Enemy(this, enemies, 7, 1580, 720, 1));
+                    enemy.add(new Enemy(this, btrEnemy, 4, 1580, 720, 2));
                     enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 620, 3));
                     prevTime = newTime;
                 }
@@ -176,6 +176,7 @@ public class GameModeDefense extends GameMode implements Runnable {
                         testCollisionWallWithEnemy();
                         testCollisionWithBound();
                         testCollisionWithBoundTop();
+                        testCollisionWallWithBullet();
                     }
                 } catch (Exception e) {
                 } finally {
@@ -210,13 +211,19 @@ public class GameModeDefense extends GameMode implements Runnable {
             e.onDrawSprites(canvas);
             if (e instanceof Btr) {
                 Btr b = (Btr) e;
-                b.shot(() -> ball.add(createSpriteBulletFromBtr(R.drawable.bullet,  b.x, b.y + 60)));
+                b.shot(() -> bulletsEnemy.add(createSpriteBulletFromBtr(R.drawable.bullet_2,  b.x, b.y + 60)));
             }
         }
 
         Iterator<Bullet> j = ball.iterator();
         while (j.hasNext()) {
             Bullet b = j.next();
+            b.onDraw(canvas);
+        }
+
+        Iterator<Bullet> bE = bulletsEnemy.iterator();
+        while (bE.hasNext()) {
+            Bullet b = bE.next();
             b.onDraw(canvas);
         }
 
@@ -244,6 +251,25 @@ public class GameModeDefense extends GameMode implements Runnable {
                         changeScoreListener.changeScore(score+=10);
                     });
 
+                    b.remove();
+                }
+            }
+        }
+    }
+
+    private void testCollisionWallWithBullet() {
+        Iterator<Bullet> b = bulletsEnemy.iterator();
+        while (b.hasNext()) {
+            Bullet bullet = b.next();
+            Iterator<Wall> i = walls.iterator();
+            while (i.hasNext()) {
+                Wall wall = i.next();
+                if (((bullet.x + bullet.width) > wall.x)
+                        && (bullet.x < (wall.x + wall.width))
+                        && ((bullet.y + bullet.height) > wall.y)
+                        && (bullet.y < (wall.y + wall.height))) {
+                    explosions.add(new Sprite(explosion, bullet.x, bullet.y, 7));
+                    wall.damage(i::remove);
                     b.remove();
                 }
             }
@@ -302,7 +328,7 @@ public class GameModeDefense extends GameMode implements Runnable {
                 ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) / 10));
                 ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) * -1 / 10));
             } else {
-                walls.add(new Wall(this, wall, (int) e.getX(), (int) e.getY()));
+                walls.add(new Wall(getResources(), (int) e.getX(), (int) e.getY()));
             }
         }
         return true;
