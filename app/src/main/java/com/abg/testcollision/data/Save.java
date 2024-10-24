@@ -62,4 +62,16 @@ public class Save {
         prefer = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         return prefer.getInt("bullet", 1);
     }
+
+    public void saveRecharge(int point) {
+        prefer = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = prefer.edit();
+        ed.putInt("recharge", point);
+        ed.apply();
+    }
+
+    public int getRecharge() {
+        prefer = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        return prefer.getInt("recharge", 1);
+    }
 }
