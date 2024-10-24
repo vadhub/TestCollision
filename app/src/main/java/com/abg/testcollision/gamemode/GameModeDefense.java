@@ -45,6 +45,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     private List<Sprite> explosions = new ArrayList<>();
     Bitmap explosion;
+    Bitmap destroyExplosion;
 
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap enemies;
@@ -118,6 +119,7 @@ public class GameModeDefense extends GameMode implements Runnable {
         enemies = BitmapFactory.decodeResource(getResources(), R.drawable.trukamo_left);
         btrEnemy = BitmapFactory.decodeResource(getResources(), R.drawable.btr);
         explosion = BitmapFactory.decodeResource(getResources(), R.drawable.spritesheet);
+        destroyExplosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosion);
         cannon = BitmapFactory.decodeResource(getResources(), R.drawable.tower);
     }
 
@@ -127,9 +129,9 @@ public class GameModeDefense extends GameMode implements Runnable {
             if (startGame) {
                 long newTime = System.currentTimeMillis();
                 if ((newTime - prevTime) > 2000) {
-                    enemy.add(new Enemy(this, enemies, 7, 1580, 720, 1));
+                    enemy.add(new Enemy(this, enemies, 7, 1580, 500, 1));
                     enemy.add(new Enemy(this, btrEnemy, 4, 1580, 720, 2));
-                    enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 620, 3));
+                    enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 800, 3));
                     prevTime = newTime;
                 }
             }
@@ -247,6 +249,7 @@ public class GameModeDefense extends GameMode implements Runnable {
                         && (Math.abs(balls.y - enemies.y) <= (balls.height + enemies.height))) {
                     explosions.add(new Sprite(explosion, balls.x, balls.y, 7));
                     enemies.damage(() -> {
+                        explosions.add(new Sprite(destroyExplosion, enemies.x, enemies.y, 8));
                         i.remove();
                         changeScoreListener.changeScore(score+=10);
                     });
