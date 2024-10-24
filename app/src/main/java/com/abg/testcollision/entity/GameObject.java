@@ -6,4 +6,8 @@ public class GameObject {
     public int width;
     public  int height;
     public int speed;
+
+    public interface Destroy {
+        void onDestroy();
+    }
 }

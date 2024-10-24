@@ -18,10 +18,6 @@ public class Enemy extends GameObject {
     protected Sprite sprite;
     protected int hp;
 
-    public interface Destroy {
-        void onDestroy();
-    }
-
     /**
      * Конструктор класса
      */
