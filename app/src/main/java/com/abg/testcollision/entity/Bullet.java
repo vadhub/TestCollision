@@ -24,8 +24,8 @@ public class Bullet extends GameObject {
 
         this.x = x;            //позиция по Х
         this.y = y;          //позиция по У
-        this.width = 27;       //ширина снаряда
-        this.height = 40;      //высота снаряда
+        this.width = 14;       //ширина снаряда
+        this.height = 32;      //высота снаряда
         angle = Math.atan2(gameView.yClick - y, gameView.xClick - x) + angleCorrect;
 
         float a = (float) (Math.atan2(gameView.yClick - y, gameView.xClick - x) * 180 / Math.PI) + 90;
