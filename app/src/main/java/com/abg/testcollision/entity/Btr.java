@@ -11,12 +11,9 @@ import java.util.Random;
 
 public class Btr extends Enemy {
 
-    private Bitmap cannon;
-    Random rnd = new Random();
-    private long prevTime = System.currentTimeMillis();
-    public interface ShotListener {
-        void shot();
-    }
+    private final Bitmap cannon;
+    private final Random rnd = new Random();
+    private final ReactDelay shotReact;
 
     /**
      * Конструктор класса
@@ -24,7 +21,6 @@ public class Btr extends Enemy {
     public Btr(GameMode gameView, Bitmap bmp, Bitmap cannon, int speed, int x, int y, int hp) {
         this.gameView = gameView;
         this.bmp = bmp;
-
 
         this.x = x;
         this.y = rnd.nextInt(y);
@@ -38,14 +34,11 @@ public class Btr extends Enemy {
         matrix.setRotate(-90);
         this.cannon = Bitmap.createBitmap(cannon, 0, 0, cannon.getWidth(), cannon.getHeight(), matrix, true);
         sprite = new Sprite(bmp, 0, 0, 2);
+        shotReact = new ReactDelay();
     }
 
-    public void shot(ShotListener shotListener) {
-        long newTime = System.currentTimeMillis();
-        if ((newTime - prevTime) > (rnd.nextInt(1500)+800)) {
-            shotListener.shot();
-            prevTime = newTime;
-        }
+    public void shot(Listener shotListener) {
+        shotReact.delay(rnd.nextInt(1500)+800, shotListener);
     }
 
     public void onDrawSprites(Canvas c) {

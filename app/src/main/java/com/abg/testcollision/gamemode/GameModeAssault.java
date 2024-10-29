@@ -35,12 +35,12 @@ public class GameModeAssault extends GameMode implements Runnable {
     private List<Wall> walls = new ArrayList<>();
     Bitmap wall;
 
-    private ChangeCountListener changeCountListener;
+    private ChangeAmountListener changeCountListener;
     Random rnd = new Random();
 
     private Thread threadShot = new Thread(this);
 
-    public void setChangeCountListener(ChangeCountListener changeCountListener) {
+    public void setChangeCountListener(ChangeAmountListener changeCountListener) {
         this.changeCountListener = changeCountListener;
     }
 

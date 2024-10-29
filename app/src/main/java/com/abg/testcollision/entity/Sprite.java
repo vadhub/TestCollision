@@ -10,7 +10,7 @@ public class Sprite {
     private final int height;
     private int currentFrame = 0;
     private final int frames;
-    private long prevTime = System.currentTimeMillis();
+    private final ReactDelay delayFrame;
     private final int x;
     private final int y;
 
@@ -22,31 +22,17 @@ public class Sprite {
         this.y = y;
 
         widthFrame = bitmap.getWidth() / frames;
+        delayFrame = new ReactDelay();
     }
 
-    public Sprite(Bitmap bitmap, int x, int y, int frames, int currentFrame) {
-        this.bitmap = bitmap;
-        this.height = bitmap.getHeight();
-        this.frames = frames;
-        this.x = x;
-        this.y = y;
-        this.currentFrame = currentFrame;
-
-        widthFrame = bitmap.getWidth() / frames;
-    }
-
-    public void startAnimation(Canvas canvas, StopAnimationListener listener) {
+    public void startAnimation(Canvas canvas, Listener listener) {
 
         int srcX = currentFrame * widthFrame;
         int srcY = height;
-        long nextTime = System.currentTimeMillis();
         if (currentFrame < frames) {
-            if ((nextTime - prevTime) >= 50) {
-                currentFrame++;
-                prevTime = nextTime;
-            }
+            delayFrame.delay(50, () -> currentFrame++);
         } else {
-            listener.stop();
+            listener.react();
             currentFrame = 0;
         }
 
@@ -55,18 +41,14 @@ public class Sprite {
         canvas.drawBitmap(bitmap, src, dst, null);
     }
 
-    public void startAnimation(Canvas canvas, int x, int y, int fps, int scale, StopAnimationListener listener) {
+    public void startAnimation(Canvas canvas, int x, int y, int fps, int scale, Listener listener) {
 
         int srcX = currentFrame * widthFrame;
         int srcY = height;
-        long nextTime = System.currentTimeMillis();
         if (currentFrame < frames-1) {
-            if ((nextTime - prevTime) >= fps) {
-                currentFrame++;
-                prevTime = nextTime;
-            }
+            delayFrame.delay(fps, () -> currentFrame++);
         } else {
-            listener.stop();
+            listener.react();
             currentFrame = 0;
         }
 
@@ -75,19 +57,15 @@ public class Sprite {
         canvas.drawBitmap(bitmap, src, dst, null);
     }
 
-    public void startAnimation(Canvas canvas, int x, int y, int fps, int scale, boolean isStartAnimation, StopAnimationListener listener) {
+    public void startAnimation(Canvas canvas, int x, int y, int fps, int scale, boolean isStartAnimation, Listener stopAnimationListener) {
 
         int srcX = currentFrame * widthFrame;
         int srcY = height;
-        long nextTime = System.currentTimeMillis();
         if (isStartAnimation) {
             if (currentFrame < frames - 1) {
-                if ((nextTime - prevTime) >= fps) {
-                    currentFrame++;
-                    prevTime = nextTime;
-                }
+                delayFrame.delay(fps, () -> currentFrame++);
             } else {
-                listener.stop();
+                stopAnimationListener.react();
                 currentFrame = 0;
             }
         }

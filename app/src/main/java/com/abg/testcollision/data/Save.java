@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
+ * Score: min 0 max 2.7 b
  * Defence wall min: 1, max: 10
  * Damage bullet min: 1, max: 10
  * Class bullet: stock: 1, explosive: 2, shotgun: 3
@@ -25,6 +26,18 @@ public class Save {
 
     public Save(Context context) {
         this.context = context;
+    }
+
+    public void saveScore(int point) {
+        prefer = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = prefer.edit();
+        ed.putInt("score", point);
+        ed.apply();
+    }
+
+    public int getScore() {
+        prefer = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        return prefer.getInt("score", 0);
     }
 
     public void saveDefenceWallPoint(int point) {

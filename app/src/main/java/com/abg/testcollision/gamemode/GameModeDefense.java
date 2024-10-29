@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -18,6 +17,7 @@ import com.abg.testcollision.entity.Btr;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
 import com.abg.testcollision.entity.Player;
+import com.abg.testcollision.entity.ReactDelay;
 import com.abg.testcollision.entity.Sprite;
 import com.abg.testcollision.entity.Wall;
 
@@ -34,37 +34,38 @@ public class GameModeDefense extends GameMode implements Runnable {
     private GameThread mThread;
     private int countPassEnemy;
     private int score;
-    private long prevTime;
 
     private State state = State.SHOOT;
 
     private List<Bullet> ball = new ArrayList<>();
     private List<Bullet> bulletsEnemy = new ArrayList<>();
     private Player player;
-    Bitmap players;
-    Bitmap cannon;
+    private Bitmap players;
+    private Bitmap cannon;
 
     private List<Sprite> explosions = new ArrayList<>();
-    Bitmap explosion;
-    Bitmap destroyExplosion;
+    private Bitmap explosion;
+    private Bitmap destroyExplosion;
 
     private List<Enemy> enemy = new ArrayList<>();
-    Bitmap enemies;
-    Bitmap btrEnemy;
-    boolean isShot;
+    private Bitmap enemies;
+    private Bitmap btrEnemy;
+    private boolean isShot;
 
     private List<Wall> walls = new ArrayList<>();
 
     private Thread threadEnemy = new Thread(this);
-    private ChangeCountListener changeCountListener;
-    private ChangeScoreListener changeScoreListener;
-    Random rnd = new Random();
+    private ChangeAmountListener changeCountListener;
+    private ChangeAmountListener changeScoreListener;
+    private Random rnd = new Random();
+    private ReactDelay spawnEnemy;
 
-    public void setChangeCountListener(ChangeCountListener changeCountListener) {
+
+    public void setChangeCountListener(ChangeAmountListener changeCountListener) {
         this.changeCountListener = changeCountListener;
     }
 
-    public void setChangeScoreListener(ChangeScoreListener changeScoreListener) {
+    public void setChangeScoreListener(ChangeAmountListener changeScoreListener) {
         this.changeScoreListener = changeScoreListener;
     }
 
@@ -73,10 +74,6 @@ public class GameModeDefense extends GameMode implements Runnable {
      */
     private boolean running = false;
     private boolean startGame = false;
-
-    public boolean isStartGame() {
-        return startGame;
-    }
 
     public void setStartGame(boolean startGame) {
         this.startGame = startGame;
@@ -87,7 +84,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
         mThread = new GameThread(this);
         threadEnemy.start();
-        prevTime = System.currentTimeMillis();
+        spawnEnemy = new ReactDelay();
 
         /*Рисуем все наши объекты и все все все*/
         getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -129,13 +126,10 @@ public class GameModeDefense extends GameMode implements Runnable {
     public void run() {
         while (true) {
             if (startGame) {
-                long newTime = System.currentTimeMillis();
-                if ((newTime - prevTime) > 2000) {
-                    enemy.add(new Enemy(this, enemies, 3, 1580, new Area(100, 300), 1));
+                spawnEnemy.delay(2000,
+                                () -> enemy.add(new Enemy(this, enemies, 3, 1580, new Area(100, 300), 1)));
                    // enemy.add(new Enemy(this, btrEnemy, 1, 1580, 720, 2));
                     //enemy.add(new Btr(this, btrEnemy, cannon, 1, 1580, 800, 3));
-                    prevTime = newTime;
-                }
             }
         }
     }
@@ -253,7 +247,7 @@ public class GameModeDefense extends GameMode implements Runnable {
                     enemies.damage(() -> {
                         explosions.add(new Sprite(destroyExplosion, enemies.x, enemies.y, 8));
                         i.remove();
-                        changeScoreListener.changeScore(score+=10);
+                        changeScoreListener.change(score+=10);
                     });
 
                     b.remove();
