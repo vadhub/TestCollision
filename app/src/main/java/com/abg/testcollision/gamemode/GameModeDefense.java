@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import com.abg.testcollision.R;
+import com.abg.testcollision.entity.Area;
 import com.abg.testcollision.entity.Btr;
 import com.abg.testcollision.entity.Bullet;
 import com.abg.testcollision.entity.Enemy;
@@ -129,9 +130,9 @@ public class GameModeDefense extends GameMode implements Runnable {
             if (startGame) {
                 long newTime = System.currentTimeMillis();
                 if ((newTime - prevTime) > 2000) {
-                    enemy.add(new Enemy(this, enemies, 7, 1580, 500, 1));
-                    enemy.add(new Enemy(this, btrEnemy, 4, 1580, 720, 2));
-                    enemy.add(new Btr(this, btrEnemy, cannon, 3, 1580, 800, 3));
+                    enemy.add(new Enemy(this, enemies, 3, 1580, new Area(100, 300), 1));
+                   // enemy.add(new Enemy(this, btrEnemy, 1, 1580, 720, 2));
+                    //enemy.add(new Btr(this, btrEnemy, cannon, 1, 1580, 800, 3));
                     prevTime = newTime;
                 }
             }

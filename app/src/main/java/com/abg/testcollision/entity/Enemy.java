@@ -17,6 +17,7 @@ public class Enemy extends GameObject {
     public boolean vector;
     protected Sprite sprite;
     protected int hp;
+    protected Area area;
 
     /**
      * Конструктор класса
@@ -25,8 +26,8 @@ public class Enemy extends GameObject {
         this.gameView = gameView;
         this.bmp = bmp;
 
-        Random rnd = new Random();
         this.x = x;
+        Random rnd = new Random();
         this.y = rnd.nextInt(y);
         this.speed =  speed;
 
@@ -52,6 +53,19 @@ public class Enemy extends GameObject {
         this.width = 32;
         this.height = 32;
         this.vector = vector;
+    }
+
+    public Enemy(GameMode gameView, Bitmap bmp, int speed, int x, Area area, int hp) {
+        this.gameView = gameView;
+        this.bmp = bmp;
+
+        this.x = x;
+        this.y = (int) (area.getX2() + (Math.random() * (area.getX2() - area.getX1())));
+        this.speed = speed;
+        this.width = 32;
+        this.height = 32;
+        this.hp = hp;
+        sprite = new Sprite(bmp, 0, 0, 2);
     }
 
     public Enemy() {
@@ -85,16 +99,6 @@ public class Enemy extends GameObject {
     public void backMove() {
         if (distance != 10) {
             x += 2;
-            distance += 2;
-        } else {
-            forward = true;
-            distance = 0;
-        }
-    }
-
-    public void backDownMove() {
-        if (distance != 10) {
-            y += 2;
             distance += 2;
         } else {
             forward = true;
