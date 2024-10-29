@@ -51,6 +51,7 @@ public class GameModeDefense extends GameMode implements Runnable {
     private List<Enemy> enemy = new ArrayList<>();
     Bitmap enemies;
     Bitmap btrEnemy;
+    boolean isShot;
 
     private List<Wall> walls = new ArrayList<>();
 
@@ -196,7 +197,7 @@ public class GameModeDefense extends GameMode implements Runnable {
 
     @SuppressLint("DrawAllocation")
     protected void onDraw(Canvas canvas) {
-        player.onDraw(canvas,(getWidth() / 2) - 32, getHeight() - 256);
+        player.onDraw(canvas,(getWidth() / 2) - 32, getHeight() - 256, isShot, () -> isShot = false);
 
         Iterator<Wall> w = walls.iterator();
         while (w.hasNext()) {
@@ -331,6 +332,7 @@ public class GameModeDefense extends GameMode implements Runnable {
                 ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) / 10));
                 ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) / 10));
                 ball.add(createSpriteBullet(R.drawable.bullet, (float) rnd.nextInt(2) * -1 / 10));
+                isShot = true;
             } else {
                 walls.add(new Wall(getResources(), (int) e.getX(), (int) e.getY()));
             }

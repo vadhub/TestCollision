@@ -28,7 +28,7 @@ public class Player extends GameObject{
     }
 
     //рисуем наш спрайт
-    public void onDraw(Canvas c, int x, int y) {
-        sprite.startAnimation(c, x, y, 100, 1, () -> {});
+    public void onDraw(Canvas c, int x, int y, boolean isShot, StopAnimationListener animationListener) {
+        sprite.startAnimation(c, x, y, 100, 1, isShot, animationListener);
     }
 }

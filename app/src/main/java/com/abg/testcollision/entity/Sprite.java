@@ -24,6 +24,17 @@ public class Sprite {
         widthFrame = bitmap.getWidth() / frames;
     }
 
+    public Sprite(Bitmap bitmap, int x, int y, int frames, int currentFrame) {
+        this.bitmap = bitmap;
+        this.height = bitmap.getHeight();
+        this.frames = frames;
+        this.x = x;
+        this.y = y;
+        this.currentFrame = currentFrame;
+
+        widthFrame = bitmap.getWidth() / frames;
+    }
+
     public void startAnimation(Canvas canvas, StopAnimationListener listener) {
 
         int srcX = currentFrame * widthFrame;
@@ -60,6 +71,28 @@ public class Sprite {
         }
 
         Rect src = new Rect(srcX, 0, srcX+widthFrame, srcY);
+        Rect dst = new Rect(x, y, x + widthFrame + scale, y + srcY + scale);
+        canvas.drawBitmap(bitmap, src, dst, null);
+    }
+
+    public void startAnimation(Canvas canvas, int x, int y, int fps, int scale, boolean isStartAnimation, StopAnimationListener listener) {
+
+        int srcX = currentFrame * widthFrame;
+        int srcY = height;
+        long nextTime = System.currentTimeMillis();
+        if (isStartAnimation) {
+            if (currentFrame < frames - 1) {
+                if ((nextTime - prevTime) >= fps) {
+                    currentFrame++;
+                    prevTime = nextTime;
+                }
+            } else {
+                listener.stop();
+                currentFrame = 0;
+            }
+        }
+
+        Rect src = new Rect(srcX, 0, srcX + widthFrame, srcY);
         Rect dst = new Rect(x, y, x + widthFrame + scale, y + srcY + scale);
         canvas.drawBitmap(bitmap, src, dst, null);
     }
